@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Hospital_Management_System.Models
 {
-    internal class Doctor
+    public class Doctor
     {
+        public int doctorId { get; set; }
+        public string doctorName { get; set; }
+        public string doctorSpecialization { get; set; }
+        public string doctorPhone { get; set; }
     }
 }
