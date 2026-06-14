@@ -111,19 +111,28 @@ namespace Hospital_Management_System
             //generate slot id:
             int slotId = (context.availableSlots.Count)+1;
 
-            //Console.WriteLine("Enter doctor Specialization:");
-            //string doctorSpecialization = Console.ReadLine();
+            Console.WriteLine("Enter doctor id:");
+            int doctorId = int.Parse(Console.ReadLine());
 
-            //Console.WriteLine("Enter doctor Phone");
-            //string doctorPhone = Console.ReadLine();
+            Console.WriteLine("Enter slot Date :");
+            string slotDate = Console.ReadLine();
 
-            //Console.WriteLine("Enter doctor Email:");
-            //string doctorEmail = Console.ReadLine();
-
-            //Console.WriteLine("Enter doctor consultationFee: ");
-            //decimal consultationFee = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Enter slot Time:");
+            string slotTime = Console.ReadLine();
+            context.availableSlots.Add(new AvailableSlot
+            {
+                slotId=slotId,
+                doctorId=doctorId,
+                slotDate=slotDate,
+                slotTime=slotTime,
+                isBooked=false
+            });
+            
+                Console.WriteLine(" slot has been added successfuly.");
+            
+           
         }
-            static void Main(string[] args)
+        static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
 
