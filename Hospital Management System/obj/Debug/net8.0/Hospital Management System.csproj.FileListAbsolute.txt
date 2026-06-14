@@ -1,0 +1,5 @@
+C:\Users\sheik\OneDrive\Documents\BAKEND\Hospital Management System\Hospital Management System\obj\Debug\net8.0\Hospital Management System.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sheik\OneDrive\Documents\BAKEND\Hospital Management System\Hospital Management System\obj\Debug\net8.0\Hospital Management System.AssemblyInfoInputs.cache
+C:\Users\sheik\OneDrive\Documents\BAKEND\Hospital Management System\Hospital Management System\obj\Debug\net8.0\Hospital Management System.AssemblyInfo.cs
+C:\Users\sheik\OneDrive\Documents\BAKEND\Hospital Management System\Hospital Management System\obj\Debug\net8.0\Hospital Management System.csproj.CoreCompileInputs.cache
+C:\Users\sheik\OneDrive\Documents\BAKEND\Hospital Management System\Hospital Management System\obj\Debug\net8.0\Hospital Management System.sourcelink.json

@@ -133,7 +133,7 @@ namespace Hospital_Management_System
            
         }
 
-        public static void BookAppointment( HospitalContext context)
+        public static void BookAppointment(HospitalContext context)
         {
 
             // generate appointment Id:
@@ -186,6 +186,75 @@ namespace Hospital_Management_System
                 Console.WriteLine(" time slot is available.");
             }
         }
+
+        public static void CancelAppointment(HospitalContext context)
+        {
+            Console.WriteLine("Enter appointment Id:");
+            int AppointmentId = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter slot id: ");
+            int slotId = int.Parse(Console.ReadLine());
+
+            var appointment = context.appointments.FirstOrDefault(find => find.appointmentId == AppointmentId);
+
+            var slot = context.availableSlots.FirstOrDefault(s => s.slotId == slotId);
+
+            if (appointment == null)
+            {
+                Console.WriteLine(" appointment not found.");
+            }
+            else if (appointment.status == "cancelled")
+            {
+                
+                Console.WriteLine("appointment is alrady cancelld");
+            }
+            else
+            {
+                slot.isBooked = true;
+                Console.WriteLine("Appointment cancelled successfully.");
+            }
+            
+           
+        }
+
+        public static void CreateMedicalRecord(HospitalContext context)
+        {
+            Console.WriteLine("Enter appointment Id:");
+            int appointmentId = int.Parse(Console.ReadLine());
+
+            var appointment = context.appointments.FirstOrDefault(a => a.appointmentId ==appointmentId );
+
+            if (appointment == null)
+            {
+                Console.WriteLine("Appointment not found.");
+            }
+            else if (appointment.status == "Compleated")
+            {
+                Console.WriteLine("Already completed");
+            }
+
+            Console.WriteLine("Enter diagnosis:");
+            string diagnosis = Console.ReadLine();
+
+            Console.WriteLine("Enter medication:");
+            string medication = Console.ReadLine();
+
+            if (diagnosis=="" || medication == "")
+            {
+                Console.WriteLine("Error: missing data!");
+            }
+
+            
+            context.medicalRecords.Add(new MedicalRecord
+            {
+                appointmentId = appointmentId,
+                diagnosis = diagnosis,
+                prescription = medication,
+               
+            });
+            appointment.status = "compleated";
+            Console.WriteLine("Medical record created successfully.");
+        }
         static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
@@ -195,6 +264,59 @@ namespace Hospital_Management_System
             maincontext.appointments = new List<Models.Appointment>();
             maincontext.medicalRecords = new List<Models.MedicalRecord>();
             maincontext.availableSlots = new List<Models.AvailableSlot>();
+
+
+            bool exit = false;
+            while (exit == false)
+            {
+                //let system begin
+                Console.WriteLine("welcome to hospital manegment system!");
+                Console.WriteLine(" please select an option:");
+                Console.WriteLine("1.Register Patient:");
+                Console.WriteLine("2.Register Doctor:");
+                Console.WriteLine("3.Display All Patients:");
+                Console.WriteLine("4.Display All Doctors By Spetialization:");
+                Console.WriteLine("5.Add Avilable Time Slot For Doctor:");
+                Console.WriteLine("6.Book Appointment:");
+                Console.WriteLine("7.Cancel Appointment:");
+                Console.WriteLine("8.Create Medical Record:");
+
+                int option = int.Parse(Console.ReadLine());
+                switch (option)
+                {
+                 case 1:
+                        RegisterPatient(maincontext);
+                    break;
+
+                 case 2:
+                        RegisterDoctor(maincontext);
+                     break;
+
+                    case 3:
+                        DisplayAllPatients(maincontext);
+                        break;
+
+                    case 4:
+                        DisplayAllDoctorsBySpetialization(maincontext);
+                        break;
+
+                    case 5:
+                        AddAvilableTimeSlotForDoctor(maincontext);
+                        break;
+
+                    case 6:
+                        BookAppointment(maincontext);
+                        break;
+                    case 7:
+                        CancelAppointment(maincontext);
+                        break;
+
+                    case 8:
+                        CreateMedicalRecord(maincontext);
+                        break;
+                }
+            }
         }
+
     }
 }
