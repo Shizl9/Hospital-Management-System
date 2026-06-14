@@ -135,8 +135,56 @@ namespace Hospital_Management_System
 
         public static void BookAppointment( HospitalContext context)
         {
+
             // generate appointment Id:
             int appointmentId = (context.appointments.Count) + 1;
+
+            Console.WriteLine("Enter patient id: ");
+            int patientid = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter doctor id: ");
+            int doctorid = int.Parse(Console.ReadLine());
+
+            foreach( var slot in context.availableSlots)
+            {
+                if ( slot.doctorId == doctorid && slot.isBooked == false)
+                {
+                    Console.WriteLine($"slot id :{slot.slotId} , Date: {slot.slotDate}, Time: {slot.slotTime}");
+                    Console.WriteLine("no slots booked yet");
+                }
+              
+                else
+                {
+                    Console.WriteLine("slot is already booked.");
+                }
+            }
+
+            Console.WriteLine("Enter slot id: ");
+            int slotId = int.Parse(Console.ReadLine());
+            if (slotId == slotId)
+            {
+                Console.WriteLine("");
+            }
+
+            Console.WriteLine("Enter status : ");
+            string status = Console.ReadLine();
+
+            context.appointments.Add(new Appointment
+            {
+                appointmentId=appointmentId,
+                patientId=patientid,
+                doctorId=doctorid,
+                
+                status="unbooked"
+            });
+            if (status =="booked")
+            {
+                Console.WriteLine(" time slot as no longer available.");
+            }
+            else
+            {
+                Console.WriteLine(" time slot is available.");
+            }
         }
         static void Main(string[] args)
         {
