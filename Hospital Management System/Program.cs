@@ -105,6 +105,24 @@ namespace Hospital_Management_System
                 }
             }
         }
+
+        public static void AddAvilableTimeSlotForDoctor(HospitalContext context)
+        {
+            //generate slot id:
+            int slotId = (context.availableSlots.Count)+1;
+
+            //Console.WriteLine("Enter doctor Specialization:");
+            //string doctorSpecialization = Console.ReadLine();
+
+            //Console.WriteLine("Enter doctor Phone");
+            //string doctorPhone = Console.ReadLine();
+
+            //Console.WriteLine("Enter doctor Email:");
+            //string doctorEmail = Console.ReadLine();
+
+            //Console.WriteLine("Enter doctor consultationFee: ");
+            //decimal consultationFee = decimal.Parse(Console.ReadLine());
+        }
             static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
