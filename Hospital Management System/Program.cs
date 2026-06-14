@@ -90,6 +90,21 @@ namespace Hospital_Management_System
                 }
             }
         }
+
+        public static void DisplayAllDoctorsBySpetialization( HospitalContext context)
+        {
+            foreach ( Doctor doctor in context.doctors)
+            {
+                if (doctor.doctorSpecialization == doctor.doctorSpecialization)
+                {
+                    Console.WriteLine($"doctor name:{doctor.doctorName}, doctor Specialization:{doctor.doctorSpecialization}");
+                }
+                else
+                {
+                    Console.WriteLine(" not matched spetailization. ");
+                }
+            }
+        }
             static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
