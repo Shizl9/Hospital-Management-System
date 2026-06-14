@@ -22,6 +22,9 @@
 
             Console.WriteLine("Enter patient BloodType:");
             string patientBloodType = Console.ReadLine();
+
+            //generate patient id :
+            int patientId = (context.patients.Count) + 1;
         }
             static void Main(string[] args)
         {
