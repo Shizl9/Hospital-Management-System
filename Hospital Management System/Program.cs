@@ -75,6 +75,21 @@ namespace Hospital_Management_System
             });
             Console.WriteLine("Doctor added successfully with Id:" + doctorId);
         }
+
+        public static void DisplayAllPatients(HospitalContext context)
+        {
+            foreach (Patient patient in context.patients)
+            {
+                if (context.patients == null)
+                {
+                    Console.WriteLine("No patient registered yet.");
+                }
+                else
+                {
+                    Console.WriteLine("ID:" + patient.patientId + ",Name:" + patient.patientName + ",Age:" + patient.patientAge + ", Gender:" + patient.patientGender + ",phone: " + patient.patientPhone + ",Email:" + patient.patientEmail + ", BloodType:" + patient.patientBloodType);
+                }
+            }
+        }
             static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
