@@ -2,7 +2,28 @@
 {
     public class Program
     {
-        static void Main(string[] args)
+        public static void RegisterPatient(HospitalContext context)
+        {
+            //insert patient info:
+            Console.WriteLine("Enter patient name:");
+            string pName = Console.ReadLine();
+
+            Console.WriteLine("Enter patient Age: ");
+            int pAge = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter gender: ");
+            string pGender = Console.ReadLine();
+
+            Console.WriteLine("Enter patient Phone");
+            string patientPhone = Console.ReadLine();
+
+            Console.WriteLine("Enter patient Email:");
+            string pEmail = Console.ReadLine();
+
+            Console.WriteLine("Enter patient BloodType:");
+            string patientBloodType = Console.ReadLine();
+        }
+            static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
 
