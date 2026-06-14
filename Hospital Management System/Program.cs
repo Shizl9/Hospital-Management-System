@@ -61,6 +61,19 @@ namespace Hospital_Management_System
 
             //generate doctor id :
             int doctorId = (context.doctors.Count) + 1;
+
+
+            //add doctor in list of system storage:
+            context.doctors.Add(new Doctor
+            {
+                doctorId = doctorId,
+                doctorName = doctorName,
+                doctorSpecialization = doctorSpecialization,
+                doctorPhone = doctorPhone,
+                doctorEmail = doctorEmail,
+                consultationFee = consultationFee
+            });
+            Console.WriteLine("Doctor added successfully with Id:" + doctorId);
         }
             static void Main(string[] args)
         {
