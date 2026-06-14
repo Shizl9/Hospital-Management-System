@@ -58,6 +58,9 @@ namespace Hospital_Management_System
 
             Console.WriteLine("Enter doctor consultationFee: ");
             decimal consultationFee = decimal.Parse(Console.ReadLine());
+
+            //generate doctor id :
+            int doctorId = (context.doctors.Count) + 1;
         }
             static void Main(string[] args)
         {
