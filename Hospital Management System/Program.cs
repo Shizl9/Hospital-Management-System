@@ -132,6 +132,12 @@ namespace Hospital_Management_System
             
            
         }
+
+        public static void BookAppointment( HospitalContext context)
+        {
+            // generate appointment Id:
+            int appointmentId = (context.appointments.Count) + 1;
+        }
         static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
