@@ -196,45 +196,46 @@ namespace Hospital_Management_System
                 }
             }
 
-            Console.WriteLine("Appointment booked successfully");
+            Console.WriteLine("Appointment booked successfully with Id:" + appointmentId);
         }
 
-        //public static void CancelAppointment(HospitalContext context)
-        //{
-        //    Console.WriteLine("Enter appointment Id:");
-        //    int AppointmentId = int.Parse(Console.ReadLine());
-
-        //    Console.WriteLine("Enter slot id: ");
-        //    int slotId = int.Parse(Console.ReadLine());
-
-        //    var appointment = context.appointments.FirstOrDefault(find => find.appointmentId == AppointmentId);
-
-        //    var slot = context.availableSlots.FirstOrDefault(s => s.slotId == slotId);
-
-        //    if (appointment == null)
-        //    {
-        //        Console.WriteLine(" appointment not found.");
-        //    }
-        //    else if (appointment.status == "cancelled")
-        //    {
-                
-        //        Console.WriteLine("appointment is alrady cancelld");
-        //    }
-        //    else
-        //    {
-        //        slot.isBooked = true;
-        //        Console.WriteLine("Appointment cancelled successfully.");
-        //    }
-            
+        public static void CancelAppointment(HospitalContext context)
+        {
            
-        //}
+            Console.WriteLine("Enter appointment Id:");
+            int AppointmentId = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter slot id: ");
+            int slotId = int.Parse(Console.ReadLine());
+
+            var appointment = context.appointments.FirstOrDefault(find => find.appointmentId == AppointmentId);
+
+
+            if (appointment == null)
+            {
+                Console.WriteLine(" appointment not found.");
+            }
+            else if (appointment.status == "cancelled")
+            {
+
+                Console.WriteLine("appointment is alrady cancelld");
+            }
+            else
+            {
+                var slot = context.availableSlots.FirstOrDefault(s => s.slotId == slotId);
+                slot.isBooked = true;
+                Console.WriteLine("Appointment cancelled successfully.");
+            }
+
+
+        }
 
         //public static void CreateMedicalRecord(HospitalContext context)
         //{
         //    Console.WriteLine("Enter appointment Id:");
         //    int appointmentId = int.Parse(Console.ReadLine());
 
-        //    var appointment = context.appointments.FirstOrDefault(a => a.appointmentId ==appointmentId );
+        //    var appointment = context.appointments.FirstOrDefault(a => a.appointmentId == appointmentId);
 
         //    if (appointment == null)
         //    {
@@ -251,18 +252,18 @@ namespace Hospital_Management_System
         //    Console.WriteLine("Enter medication:");
         //    string medication = Console.ReadLine();
 
-        //    if (diagnosis=="" || medication == "")
+        //    if (diagnosis == "" || medication == "")
         //    {
         //        Console.WriteLine("Error: missing data!");
         //    }
 
-            
+
         //    context.medicalRecords.Add(new MedicalRecord
         //    {
         //        appointmentId = appointmentId,
         //        diagnosis = diagnosis,
         //        prescription = medication,
-               
+
         //    });
         //    appointment.status = "compleated";
         //    Console.WriteLine("Medical record created successfully.");
