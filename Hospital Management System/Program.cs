@@ -230,44 +230,46 @@ namespace Hospital_Management_System
 
         }
 
-        //public static void CreateMedicalRecord(HospitalContext context)
-        //{
-        //    Console.WriteLine("Enter appointment Id:");
-        //    int appointmentId = int.Parse(Console.ReadLine());
+        public static void CreateMedicalRecord(HospitalContext context)
+        {
+            Console.WriteLine("Enter appointment Id:");
+            int appointmentId = int.Parse(Console.ReadLine());
 
-        //    var appointment = context.appointments.FirstOrDefault(a => a.appointmentId == appointmentId);
+            var appointment = context.appointments.FirstOrDefault(a => a.appointmentId == appointmentId);
 
-        //    if (appointment == null)
-        //    {
-        //        Console.WriteLine("Appointment not found.");
-        //    }
-        //    else if (appointment.status == "Compleated")
-        //    {
-        //        Console.WriteLine("Already completed");
-        //    }
+            if (appointment == null)
+            {
+                Console.WriteLine("Appointment not found.");
+                return;
+            }
+           if (appointment.status == "Compleated")
+            {
+                Console.WriteLine("Already completed");
+                return;
+            }
 
-        //    Console.WriteLine("Enter diagnosis:");
-        //    string diagnosis = Console.ReadLine();
+            Console.WriteLine("Enter diagnosis:");
+            string diagnosis = Console.ReadLine();
 
-        //    Console.WriteLine("Enter medication:");
-        //    string medication = Console.ReadLine();
+            Console.WriteLine("Enter medication:");
+            string medication = Console.ReadLine();
 
-        //    if (diagnosis == "" || medication == "")
-        //    {
-        //        Console.WriteLine("Error: missing data!");
-        //    }
+            
+            //foreach(var fee in context.doctors)
+            //{
+                
+            //}
 
+            context.medicalRecords.Add(new MedicalRecord
+            {
+                appointmentId = appointmentId,
+                diagnosis = diagnosis,
+                prescription = medication,
 
-        //    context.medicalRecords.Add(new MedicalRecord
-        //    {
-        //        appointmentId = appointmentId,
-        //        diagnosis = diagnosis,
-        //        prescription = medication,
-
-        //    });
-        //    appointment.status = "compleated";
-        //    Console.WriteLine("Medical record created successfully.");
-        //}
+            });
+            appointment.status = "compleated";
+            Console.WriteLine("Medical record created successfully.");
+        }
         static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
@@ -328,8 +330,21 @@ namespace Hospital_Management_System
                     case 8:
                         CreateMedicalRecord(maincontext);
                         break;
+                    case 9:
+                        exit = true;
+                        break;
+                    default:
+                        Console.WriteLine("invalid option.try again.");
+                        break;
                 }
+
+
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();// to wait for user input before clearing the console
+                Console.Clear();
             }
+
+
         }
 
     }
