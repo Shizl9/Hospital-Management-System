@@ -1,5 +1,6 @@
 ﻿using Hospital_Management_System.Models;
 using System.Numerics;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Hospital_Management_System
 {
@@ -184,7 +185,15 @@ namespace Hospital_Management_System
             int doctorId = int.Parse(Console.ReadLine());
 
             //validation for doctor id:
-            bool validDoctorTD = context.doctors.Any(d => d.doctorId == doctorId);
+
+            Doctor doctor = context.doctors.FirstOrDefault(d => d.doctorId == doctorId);
+            if (doctor == null)
+            {
+                Console.WriteLine("Doctor not found.");
+                return;
+            }
+                //or
+                bool validDoctorTD = context.doctors.Any(d => d.doctorId == doctorId);
 
             //if doctor not found print this:
             if (validDoctorTD == false)
@@ -193,22 +202,7 @@ namespace Hospital_Management_System
                 return;
             }
 
-            //=== NOW ==>>>> i want to see list of available slots for doctor tha unbooked yet:
-            // i already hav doctor id 
-
-            List<AvailableSlot> slots = context.availableSlots.Where(s => s.doctorId == doctorId && s.isBooked == false)
-                                                              .ToList();//convert to list
-
-
-            // if there is no available slots print no available slots:
-            if (context.availableSlots.Count == 0)
-            {
-                Console.WriteLine("No available slots fo this doctor.");
-                return;
-            }
-
-            //if there is available slots print:
-            Console.WriteLine($" available slots for {}");
+            
             Console.WriteLine("Enter slot Date :");
             string slotDate = Console.ReadLine();
 
@@ -217,84 +211,142 @@ namespace Hospital_Management_System
 
             //generate slot id:
             int slotId = (context.availableSlots.Count) + 1;
+
             context.availableSlots.Add(new AvailableSlot
             {
-                slotId=slotId,
-                doctorId=doctorId,
-                slotDate=slotDate,
-                slotTime=slotTime,
-                isBooked=false
+                slotId = slotId,
+                doctorId = doctorId,
+                slotDate = slotDate,
+                slotTime = slotTime,
+                isBooked = false
             });
-            
-                Console.WriteLine(" slot has been added successfuly.");
-            
-           
+
+            Console.WriteLine(" slot has been added successfuly.");
+
         }
 
-        public static void BookAppointment(HospitalContext context)
+         public static void BookAppointment(HospitalContext context)
         {
 
-            // generate appointment Id:
-            int appointmentId = (context.appointments.Count) + 1;
 
             Console.WriteLine("Enter patient id: ");
             int patientid = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Enter doctor id: ");
-            int doctorid = int.Parse(Console.ReadLine());
-
-
-            foreach (var slot in context.availableSlots)
+            //validation for patient id:
+            Patient patient = context.patients.FirstOrDefault(p => p.patientId == patientid);
+            if (patient == null)
             {
-                if (slot.doctorId == doctorid && slot.isBooked == false)
-                {
-                    //display table for doctor slot
-                    Console.WriteLine($"slot id :{slot.slotId} , Date: {slot.slotDate}, Time: {slot.slotTime}");
-                    
-                }
+                Console.WriteLine("patient not found.");
+                return;
+            }
 
-                else 
-                {
-                    Console.WriteLine("No available slots for this doctor.");
-                }
+
+            //ask patient to choose doctor to treat with (ex: eys or heart doctor ets...)
+            DisplayAllDoctorsBySpetialization(context.doctors);
+
+            //ask patient to enter doctor id how choosed by patient:
+            Console.WriteLine("Enter doctor id: ");
+            int doctorId = int.Parse(Console.ReadLine());
+
+            //validation for doctor id:
+            Doctor doctor = context.doctors.FirstOrDefault(d => d.doctorId == doctorId);
+
+            //if doctor not found print:
+            if (doctor == null)
+            {
+                Console.WriteLine("not found");
+                return;
 
             }
 
-            
-            Console.WriteLine("Enter status : ");
-            string status = Console.ReadLine();
 
+            ////=== NOW ==>>>> i want to see list of available slots for doctor tha unbooked yet:
+            //// i already hav doctor id 
+
+            List<AvailableSlot> slots = context.availableSlots.Where(s => s.doctorId == doctorId && s.isBooked == false)
+                                                              .ToList();//convert to list
+
+
+            //// if there is no available slots print no available slots:
+            if (slots.Count == 0)
+            {
+                Console.WriteLine("No available slots fo this doctor.");
+                return;
+            }
+
+            //    //if there is available slots print:
+            Console.WriteLine($" available slots for {doctor.doctorName}");
+            slots.ForEach(s => Console.WriteLine($"slot Id:{s.slotId},Date:{s.slotDate},Time:{s.slotTime}"));
+
+            ////ask patient to inter slot id that he choosen :
+            Console.WriteLine("Enter slot id:");
+            int slotId = int.Parse(Console.ReadLine());
+
+            //valid slot id and unbooked slot:
+            AvailableSlot selectedslot = slots.FirstOrDefault(s => s.slotId == slotId);
+
+            if (selectedslot == null)
+            {
+                Console.WriteLine("slot already booked");
+            }
+
+            // generate appointment Id:
+            int appointmentId = (context.appointments.Count) + 1;
+
+            //set status as schaduled
             context.appointments.Add(new Appointment
             {
-                appointmentId=appointmentId,
-                patientId=patientid,
-                doctorId=doctorid,
-                status="unbooked"
+                appointmentId = appointmentId,
+                patientId = patientid,
+                doctorId=doctorId,
+                appointmentDate=selectedslot.slotDate,
+                appointmentTime=selectedslot.slotTime,
+                status = "schaduled"
             });
-            if (status =="booked")
-            {
-                Console.WriteLine(" time slot as no longer available.");
-            }
-            else
-            {
-                Console.WriteLine(" time slot is available.");
-            }
-
-            Console.WriteLine("Enter Slot Id: ");
-            int slotId = int.Parse(Console.ReadLine());
-            foreach (var s in context.availableSlots)
-            {
-                if (s.slotId == slotId)
-                {
-                    s.isBooked = true;
-                }
-                else
-                {
-                    Console.WriteLine("not booked yet.");
-                }
-            }
+            
+            //slot already booked
+            selectedslot.isBooked = true;
 
             Console.WriteLine("Appointment booked successfully with Id:" + appointmentId);
+
+
+            //foreach (var slot in context.availableSlots)
+            //{
+            //    if (slot.doctorId == doctorid && slot.isBooked == false)
+            //    {
+            //        //display table for doctor slot
+            //        Console.WriteLine($"slot id :{slot.slotId} , Date: {slot.slotDate}, Time: {slot.slotTime}");
+
+            //    }
+
+            //    else 
+            //    {
+            //        Console.WriteLine("No available slots for this doctor.");
+            //    }
+
+            //}
+
+
+
+
+
+
+
+            //Console.WriteLine("Enter Slot Id: ");
+            //int slotId = int.Parse(Console.ReadLine());
+            //foreach (var s in context.availableSlots)
+            //{
+            //    if (s.slotId == slotId)
+            //    {
+            //        s.isBooked = true;
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("not booked yet.");
+            //    }
+            //}
+
+
         }
 
         public static void CancelAppointment(HospitalContext context)
