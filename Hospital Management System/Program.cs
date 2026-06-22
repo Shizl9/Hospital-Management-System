@@ -358,25 +358,61 @@ namespace Hospital_Management_System
             Console.WriteLine("Enter slot id: ");
             int slotId = int.Parse(Console.ReadLine());
 
-            var appointment = context.appointments.FirstOrDefault(find => find.appointmentId == AppointmentId);
+            Appointment appointment = context.appointments.FirstOrDefault(find => find.appointmentId == AppointmentId);
 
-
+            //if appointment empty
             if (appointment == null)
             {
                 Console.WriteLine(" appointment not found.");
+                return;
             }
-            else if (appointment.status == "cancelled")
+
+            if (appointment.status == "cancelled")
             {
 
                 Console.WriteLine("appointment is alrady cancelld");
-            }
-            else
-            {
-                var slot = context.availableSlots.FirstOrDefault(s => s.slotId == slotId);
-                slot.isBooked = true;
-                Console.WriteLine("Appointment cancelled successfully.");
+                return;
             }
 
+            if (appointment.status == "Completed")
+            {
+                Console.WriteLine("Cannot cancel a completed appointment.");
+                return;
+            }
+
+            AvailableSlot slot = context.availableSlots.FirstOrDefault(s =>
+                s.doctorId == appointment.doctorId &&
+                s.slotDate == appointment.appointmentDate &&
+                s.slotTime == appointment.appointmentTime
+            );
+
+            if (slot != null)
+                slot.isBooked = false;
+
+            appointment.status = "Cancelled";
+            Console.WriteLine($"Appointment {appointment.appointmentId} has been cancelled and the time slot is now available again.");
+
+        }
+
+        public static void ViewAllCancelledAppointments(HospitalContext context)
+        {
+            Console.WriteLine("\n=== Cancelled Appointments ===");
+            
+            //view cancelld appointments using where:
+            List<Appointment> cancelledAppointments = context.appointments
+                              .Where(a => a.status == "Cancelled")
+                              .ToList();
+
+
+            //if there is no cancelled appointments print:
+            if (cancelledAppointments == null)
+            {
+                Console.WriteLine("No cancelled appointments found.");
+                return;
+            }
+
+            //if there print:
+            cancelledAppointments.ForEach(c => Console.WriteLine($"Id:{c.appointmentId}, patient Id:{c.patientId}, doctoor Id: {c.doctorId}, date:{c.appointmentDate}, time:{ c.appointmentTime}, status:{c.status}"));
 
         }
 
@@ -405,10 +441,7 @@ namespace Hospital_Management_System
             string medication = Console.ReadLine();
 
             
-            //foreach(var fee in context.doctors)
-            //{
-                
-            //}
+            
    
         }
         static void Main(string[] args)
@@ -429,10 +462,7 @@ namespace Hospital_Management_System
                 new Patient(1,"faridah",25,"Female","+68995124575","faridah@gmail.com","A")
             };
 
-            //maincontext.doctors = new List<Models.Doctor>()
-            //{
-            //    new Doctor()
-            //};
+            
             bool exit = false;
             while (exit == false)
             {
