@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "1EvjK7d72LU=",
+  "dgSpecHash": "ybwRye9j/xY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\sheik\\OneDrive\\Documents\\BAKEND\\Hospital Management System\\Hospital Management System\\Hospital Management System.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\sheik\\Downloads\\Hospital-Management-System\\Hospital Management System\\Hospital Management System.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sheik\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
+    "C:\\Users\\sheik\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
+    "C:\\Users\\sheik\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512",
+    "C:\\Users\\sheik\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.26\\microsoft.netcore.app.host.win-x64.8.0.26.nupkg.sha512"
+  ],
   "logs": []
 }

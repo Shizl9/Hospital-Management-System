@@ -421,18 +421,31 @@ namespace Hospital_Management_System
             Console.WriteLine("Enter appointment Id:");
             int appointmentId = int.Parse(Console.ReadLine());
 
-            var appointment = context.appointments.FirstOrDefault(a => a.appointmentId == appointmentId);
+            //va;idation for appointment id:
+            Appointment appointment = context.appointments.FirstOrDefault(a => a.appointmentId == appointmentId);
 
+            //if appointment not found print:
             if (appointment == null)
             {
                 Console.WriteLine("Appointment not found.");
                 return;
             }
-           if (appointment.status == "Compleated")
+
+            if (appointment.status == "Cancelled")
             {
-                Console.WriteLine("Already completed");
+                Console.WriteLine("Cannot create a medical record for a cancelled appointment.");
                 return;
             }
+            if (appointment.status == "Compleated")
+            {
+                Console.WriteLine("A medical record already exists for this appointment.");
+                return;
+            }
+
+            //view doctor's consultation fee for this appointment:
+            decimal fee = context.doctors.Where(d=>d.doctorId== appointment.doctorId)
+                                         .Select(d => d.consultationFee)
+                                         .FirstOrDefault();
 
             Console.WriteLine("Enter diagnosis:");
             string diagnosis = Console.ReadLine();
@@ -440,10 +453,120 @@ namespace Hospital_Management_System
             Console.WriteLine("Enter medication:");
             string medication = Console.ReadLine();
 
-            
-            
-   
+            Console.WriteLine("Enter visit date:");
+            string visitDate = Console.ReadLine();
+
+
+            int recordId =( context.medicalRecords.Count) + 1;
+
+            context.medicalRecords.Add(new MedicalRecord
+            {
+               recordId=recordId,
+               patientId=appointment.patientId,
+               doctorId=appointment.doctorId,
+               diagnosis=diagnosis,
+               prescription= medication,
+               visitDate=visitDate,
+               visitFee=fee
+            });
+
+            Console.WriteLine($"Medical record created successfully. Record ID: {recordId}" +
+                              $" | Fee charged: {fee:C}");
+
         }
+
+        public static void PatientMedicalHistory(HospitalContext context)
+        {
+            Console.WriteLine("\n=== Patient Medical History Report ===");
+
+            Console.Write("Enter patient ID: ");
+            int patientId = int.Parse(Console.ReadLine());
+
+            // find the patient
+            Patient patient = context.patients.FirstOrDefault(p => p.patientId == patientId);
+
+            if (patient == null)
+            {
+                Console.WriteLine("Patient not found.");
+                return;
+            }
+
+            //  get all records for this patient
+            List<MedicalRecord> records = context.medicalRecords
+                .Where(r => r.patientId == patientId)
+                .ToList();
+
+            if (records.Count == 0)
+            {
+                Console.WriteLine("No medical records found for this patient.");
+                return;
+            }
+
+            Console.WriteLine($"\n--- Medical History for {patient.patientName} (ID: {patientId}) ---");
+
+            records.ForEach(r =>
+            {
+                // resolve doctor name
+                string doctorName = context.doctors
+                    .Where(d => d.doctorId == r.doctorId)
+                    .Select(d => d.doctorName)
+                    .FirstOrDefault() ?? "Unknown";
+
+                Console.WriteLine($"\n  Record ID   : {r.recordId}");
+                Console.WriteLine($"  Visit Date  : {r.visitDate}");
+                Console.WriteLine($"  Doctor      : {doctorName}");
+                Console.WriteLine($"  Diagnosis   : {r.diagnosis}");
+                Console.WriteLine($"  Prescription: {r.prescription}");
+                Console.WriteLine($"  Fee Charged : {r.visitFee:C}");
+                Console.WriteLine("  " + new string('-', 50));
+            });
+
+            //  total all fees
+            decimal totalCharged = records.Sum(r => r.visitFee);
+            Console.WriteLine($"\n  TOTAL AMOUNT CHARGED: {totalCharged:C}");
+        }
+
+        public static void DoctorRevenueSummary(HospitalContext context)
+        {
+            Console.WriteLine("\n=== Doctor Workload & Revenue Summary ===");
+
+            if (context.appointments.Count == 0)
+            {
+                Console.WriteLine("No appointments have been recorded yet.");
+                return;
+            }
+
+            // LINQ: Select() to project each doctor into a summary anonymous object,
+            //       then OrderByDescending() to rank by total revenue
+            var summary = context.doctors
+                .Select(d => new
+                {
+                    d.doctorId,
+                    d.doctorName,
+                    d.doctorSpecialization,
+                    // Count() with predicate to count completed appointments
+                    completed = context.appointments.Count(a => a.doctorId == d.doctorId && a.status == "Completed"),
+                    // Count() with predicate to count cancelled appointments
+                    cancelled = context.appointments.Count(a => a.doctorId == d.doctorId && a.status == "Cancelled"),
+                    // Sum() to total revenue from medical records
+                    totalRevenue = context.medicalRecords
+                        .Where(r => r.doctorId == d.doctorId)
+                        .Sum(r => r.visitFee)
+                })
+                .OrderByDescending(x => x.totalRevenue)
+                .ToList();
+
+            Console.WriteLine("\n  Rank  | Doctor Name               | Specialization       | Completed | Cancelled | Total Revenue");
+            Console.WriteLine("  " + new string('-', 95));
+
+            for (int i = 0; i < summary.Count; i++)
+            {
+                var x = summary[i];
+                Console.WriteLine($"  #{i + 1,-5} | {x.doctorName,-25} | {x.doctorSpecialization,-20} |" +
+                                  $" {x.completed,-9} | {x.cancelled,-9} | {x.totalRevenue:C}");
+            }
+        }
+
         static void Main(string[] args)
         {
             HospitalContext maincontext = new HospitalContext();
