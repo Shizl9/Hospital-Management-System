@@ -596,12 +596,15 @@ namespace Hospital_Management_System
                 Console.WriteLine("2.Register Doctor:");
                 Console.WriteLine("3.Display All Patients:");
                 Console.WriteLine("4.Display All Patients Older than 50:");
-                Console.WriteLine("4.Display All Doctors By Spetialization:");
-                Console.WriteLine("5.Add Avilable Time Slot For Doctor:");
-                Console.WriteLine("6.Book Appointment:");
-                Console.WriteLine("7.Cancel Appointment:");
-                Console.WriteLine("8.Create Medical Record:");
-                Console.WriteLine("9.exit...");
+                Console.WriteLine("5.Display All Doctors By Spetialization:");
+                Console.WriteLine("6.Add Avilable Time Slot For Doctor:");
+                Console.WriteLine("7.Book Appointment:");
+                Console.WriteLine("8.Cancel Appointment:");
+                Console.WriteLine("9.View All Cancelled Appointments:"); 
+                Console.WriteLine("10.Create Medical Record:");
+                Console.WriteLine("11.Patient Medical History:");
+                Console.WriteLine("12.Doctor Revenue Summary:");
+                Console.WriteLine("13.exit...");
 
                 int option = int.Parse(Console.ReadLine());
                 switch (option)
@@ -634,9 +637,19 @@ namespace Hospital_Management_System
                         break;
 
                     case 8:
+                        ViewAllCancelledAppointments(maincontext);
+                        break;
+
+                    case 9:
                         CreateMedicalRecord(maincontext);
                         break;
-                    case 9:
+                    case 10:
+                        PatientMedicalHistory(maincontext);
+                        break;
+                    case 11:
+                        DoctorRevenueSummary(maincontext);
+                        break;
+                    case 12:
                         exit = true;
                         break;
                     default:
